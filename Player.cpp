@@ -13,15 +13,15 @@ Player::Player(SDL_Surface* screen)
 
     this->damages = 1;
 
-    this->positionX = 5*(screen->w/PLAYERSIZE);
+    this->positionX = 3*(screen->w/PLAYERSIZE);
 
-    this->positionY = screen->h-60;
+    this->positionY = screen->h-PLAYERSIZE-20;
 
     this->spriteSize = PLAYERSIZE;
 
     this->minX = 0;
 
-    this->maxX = screen->w;
+    this->maxX = screen->w - PLAYERSIZE;
 
 }
 
@@ -37,6 +37,10 @@ void Player::Draw(SDL_Surface* screen)
     rectangle.x = this->positionX;
 
     rectangle.y = this->positionY;
+
+    // rend une des couleurs transparente
+
+    SDL_SetColorKey(hero, SDL_SRCCOLORKEY, SDL_MapRGB(hero->format, 255, 255, 255));
 
     SDL_BlitSurface(hero, 0, screen, &rectangle);
 

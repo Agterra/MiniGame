@@ -7,13 +7,14 @@
 #include <SDL/SDL.h>
 #include "SDL/SDL_ttf.h"
 #include "Player.h"
+#include "Monster.h"
 
 #define SPRITESIZE 20
 #define WINDOWHEIGHT 480
 #define WINDOWWIDTH 640
 #define WINDOWCELLS WINDOWWIDTH/SPRITESIZE4
 
-#define GAMEBACKGROUND "forestBackground.bmp"
+#define GAMEBACKGROUND "forestBackgroung.bmp"
 
 void RefreshGameDisplay(SDL_Surface* screen, Player playerOne);
 
@@ -44,6 +45,8 @@ int main ( int argc, char** argv )
     }
 
     Player playerOne = Player(screen);
+
+    Monster monsterOne = Monster(screen, 5, 0, 0);
 
     // program main loop
     bool done = false;
@@ -77,9 +80,13 @@ int main ( int argc, char** argv )
 
         // DRAWING STARTS HERE
 
-        _sleep(000);
+        _sleep(500);
+
+        monsterOne.Update(playerOne.GetpositionX());
 
         RefreshGameDisplay(screen, playerOne);
+
+        monsterOne.Draw(screen);
 
         playerOne.Draw(screen);
 

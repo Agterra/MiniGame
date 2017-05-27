@@ -207,3 +207,23 @@
 	"begin_code.h"
 	"close_code.h"
 
+1495920499 source:d:\cplusplus\test1\minigame\main.cpp
+	<cstdlib>
+	<stdlib.h>
+	<SDL/SDL.h>
+	"SDL/SDL_ttf.h"
+	"Player.h"
+	"Monster.h"
+
+1495901437 d:\cplusplus\test1\minigame\player.h
+	<SDL/SDL.h>
+
+1495920046 source:d:\cplusplus\test1\minigame\player.cpp
+	"Player.h"
+
+1495920434 source:d:\cplusplus\test1\minigame\monster.cpp
+	"Monster.h"
+
+1495920413 d:\cplusplus\test1\minigame\monster.h
+	<SDL/SDL.h>
+
