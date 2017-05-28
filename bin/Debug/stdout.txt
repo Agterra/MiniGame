@@ -1,1 +1,11 @@
-Exited cleanly
+There is a hit!
+Player life: 10There is a hit!
+Player life: 9There is a hit!
+Player life: 8There is a hit!
+Player life: 7There is a hit!
+Player life: 6There is a hit!
+Player life: 5There is a hit!
+Player life: 4There is a hit!
+Player life: 3There is a hit!
+Player life: 2There is a hit!
+Player life: 1Exited cleanly

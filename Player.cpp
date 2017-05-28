@@ -13,7 +13,7 @@ Player::Player(SDL_Surface* screen)
 
     this->damages = 1;
 
-    this->positionX = 3*(screen->w/PLAYERSIZE);
+    this->positionX = 3*PLAYERSIZE;
 
     this->positionY = screen->h-PLAYERSIZE-20;
 
@@ -73,7 +73,7 @@ void Player::Update(SDLKey pressedKey)
 
     case RIGHT:
 
-        if(this->positionX < this->maxX - this->spriteSize)
+        if(this->positionX < this->maxX)
             this->positionX += this->spriteSize;
 
     default:

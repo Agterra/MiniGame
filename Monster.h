@@ -16,6 +16,8 @@ class Monster
 
 private:
 
+    int prize;
+
     int positionX;
 
     int positionY;
@@ -36,15 +38,23 @@ private:
 
 public:
 
-    Monster(SDL_Surface* screen, int likfe, int attack, int armor);
+    Monster(SDL_Surface* screen, int life, int attack, int armor);
+
+    int getPrize(){return this->prize;}
+
+    void setPrize(int prize){this->prize = prize;}
 
     int getPositionX(){return this->positionX;}
 
     int getLife(){return this->life;}
 
+    void setLife(int life){ this->life = life;}
+
     int getArmor(){return this->armor;}
 
     int getAttack(){return this->attack;}
+
+    int getSpriteSize(){return this ->spriteSize;}
 
     MonsterDirection getDirection(){return this->direction;}
 

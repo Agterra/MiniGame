@@ -22,15 +22,15 @@ class Player
 
         int Getlife() { return life; }
 
-        void Setlife(int val) { life = val; }
+        void Setlife(int val) { this->life = val; }
 
         int Getdamages() { return damages; }
 
-        void Setdamages(int val) { damages = val; }
+        void Setdamages(int val) { this->damages = val; }
 
         int Getarmor() { return armor; }
 
-        void Setarmor(int val) { armor = val; }
+        void Setarmor(int val) { this->armor = val; }
 
         int GetpositionX() { return positionX; }
 
@@ -45,6 +45,18 @@ class Player
         void SetspriteSize(int val) { spriteSize = val; }
 
         int GetMaxLife() { return maxLife;}
+
+        int getXP(){return this->xp;}
+
+        int getLevel(){return this->level;}
+
+        int getGold(){return this->gold;}
+
+        void setXP(int XP){this->xp = XP;}
+
+        void setLevel(int level){ this->level = level;}
+
+        void setGold(int gold){this->gold = gold;}
 
         void Draw(SDL_Surface* screen);
 
@@ -63,4 +75,8 @@ class Player
         int minX;
         int spriteSize;
         Direction direction;
+
+        int xp;
+        int level;
+        int gold;
 };

@@ -7,6 +7,7 @@
 #include <SDL/SDL.h>
 #include "SDL/SDL_ttf.h"
 #include "Player.h"
+#include <iostream>
 #include "Monster.h"
 
 #define SPRITESIZE 20
@@ -16,7 +17,15 @@
 
 #define GAMEBACKGROUND "forestBackgroung.bmp"
 
+using namespace std;
+
 void RefreshGameDisplay(SDL_Surface* screen, Player playerOne);
+
+bool checkHitbox(Player aPlayer, Monster aMonster);
+
+void applyDamages(const Player& aPlayer,const Monster& aMonster);
+
+void DisplayGameOver(SDL_Surface* screen);
 
 SDL_Surface* background = SDL_LoadBMP(GAMEBACKGROUND);
 
@@ -46,7 +55,7 @@ int main ( int argc, char** argv )
 
     Player playerOne = Player(screen);
 
-    Monster monsterOne = Monster(screen, 5, 0, 0);
+    Monster monsterOne = Monster(screen, 5, 1, 0);//Life, attack, armor
 
     // program main loop
     bool done = false;
@@ -84,16 +93,61 @@ int main ( int argc, char** argv )
 
         monsterOne.Update(playerOne.GetpositionX());
 
+        if(checkHitbox(playerOne, monsterOne))
+        {
+
+            cout << "There is a hit!" << endl;
+
+            cout << "Player life: " << playerOne.Getlife();
+
+            int actualDamages = playerOne.Getdamages() - monsterOne.getArmor();
+
+            if(actualDamages > 0)
+                monsterOne.setLife(monsterOne.getLife() - actualDamages);
+
+            if(monsterOne.getLife() <= 0)
+            {
+
+                playerOne.setGold(playerOne.getGold() + monsterOne.getPrize());
+
+                //return;
+
+            }
+
+            actualDamages = monsterOne.getAttack() - playerOne.Getarmor();
+
+            if(actualDamages > 0)
+                playerOne.Setlife(playerOne.Getlife() - actualDamages);
+
+            if(playerOne.Getlife() <= 0)
+            {
+
+                break;
+
+            }
+
+        }
+
         RefreshGameDisplay(screen, playerOne);
 
         monsterOne.Draw(screen);
 
         playerOne.Draw(screen);
 
+
         // finally, update the screen :)
         SDL_Flip(screen);
 
     } // end main loop
+
+    _sleep(1000);
+
+    DisplayGameOver(screen);
+
+    // finally, update the screen :)
+    SDL_Flip(screen);
+
+    _sleep(3000);
 
     // all is well ;)
     printf("Exited cleanly\n");
@@ -108,11 +162,15 @@ void RefreshGameDisplay(SDL_Surface* screen, Player playerOne)
 
     rectangle.x = 0;
 
-    rectangle.y = 80;
+    rectangle.y = 0;
 
     rectangle.w = screen->w;
 
     rectangle.h = screen->h;
+
+    SDL_FillRect(screen, &rectangle, SDL_MapRGB(screen->format, 0X00, 0X00, 0X00));
+
+    rectangle.y = 80;
 
     SDL_BlitSurface(background, 0, screen, &rectangle);
 
@@ -137,7 +195,9 @@ void RefreshGameDisplay(SDL_Surface* screen, Player playerOne)
     rectangle.h = SPRITESIZE + 4;
 
     rectangle.w = 10 * SPRITESIZE + 4;
--
+
+    int healthBarReference = rectangle.w + SPRITESIZE;
+
     SDL_FillRect(screen, &rectangle, SDL_MapRGB(screen->format, 0xff, 0xff, 0xff));
 
     rectangle.x = SPRITESIZE;
@@ -154,7 +214,7 @@ void RefreshGameDisplay(SDL_Surface* screen, Player playerOne)
 
     SDL_FillRect(screen, &rectangle, SDL_MapRGB(screen->format, 0xff, 0x00, 0x00));
 
-    rectangle.x = rectangle.x + rectangle.w + 24;
+    rectangle.x = healthBarReference + 22;
 
     rectangle.w = SPRITESIZE;
 
@@ -173,5 +233,61 @@ void RefreshGameDisplay(SDL_Surface* screen, Player playerOne)
     SDL_Surface* armorLogo = SDL_LoadBMP("armorLogoBlack.bmp");
 
     SDL_BlitSurface(armorLogo, 0, screen, &rectangle);
+
+}
+
+void DisplayGameOver(SDL_Surface* screen)
+{
+
+    SDL_Rect rectangle;
+
+    rectangle.x = 0;
+
+    rectangle.y = 0;
+
+    rectangle.w = screen->w;
+
+    rectangle.h = screen->h;
+
+    SDL_Surface* gameOverImage = SDL_LoadBMP("gameOver.bmp");
+
+    SDL_BlitSurface(gameOverImage, 0, screen, &rectangle);
+
+}
+
+bool checkHitbox(Player aPlayer, Monster aMonster)
+{
+
+    if(aPlayer.GetpositionX() + aPlayer.GetspriteSize() == aMonster.getPositionX())
+        return true;
+
+    if(aPlayer.GetpositionX() == aMonster.getPositionX() + aMonster.getSpriteSize())
+        return true;
+
+    return false;
+
+}
+
+void applyDamages(Player aPlayer,Monster aMonster)
+{
+
+    int actualDamages = aPlayer.Getdamages() - aMonster.getArmor();
+
+    if(actualDamages > 0)
+        aMonster.setLife(aMonster.getLife() - actualDamages);
+
+    if(aMonster.getLife() <= 0)
+    {
+
+        aPlayer.setGold(aPlayer.getGold() + aMonster.getPrize());
+
+        return;
+
+    }
+
+    actualDamages = aMonster.getAttack() - aPlayer.Getarmor();
+
+    if(actualDamages > 0)
+        aPlayer.Setlife(aPlayer.Getlife() - actualDamages);
 
 }

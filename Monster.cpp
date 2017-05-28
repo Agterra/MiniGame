@@ -9,7 +9,7 @@ Monster::Monster(SDL_Surface* screen, int life, int attack, int armor)
 
     this->attack = attack;
 
-    this->positionX = (screen->w-60);
+    this->positionX = (screen->w-40);
 
     this->positionY = screen->h-40-20;
 
@@ -17,7 +17,7 @@ Monster::Monster(SDL_Surface* screen, int life, int attack, int armor)
 
     this->minX = 0;
 
-    this->maxX = screen->w - 40;
+    this->maxX = screen->w;
 
 }
 
@@ -47,11 +47,11 @@ void Monster::Draw(SDL_Surface* screen)
 void Monster::Update(int playerPOSX)
 {
 
-    if(playerPOSX < this->positionX - 20)
+    if(playerPOSX + 40 < this->positionX)
 
         this->direction = GAUCHE;
 
-    else if(playerPOSX > this->positionX + 20)
+    else if(playerPOSX > this->positionX + 40)
 
         this->direction = DROITE;
 
