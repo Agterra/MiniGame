@@ -19,6 +19,17 @@
 
 using namespace std;
 
+enum state
+{
+
+    GAMEOVER = 0,
+
+    GAME,
+
+    MENU,
+
+};
+
 void RefreshGameDisplay(SDL_Surface* screen, Player playerOne);
 
 bool checkHitbox(Player aPlayer, Monster aMonster);
@@ -26,6 +37,10 @@ bool checkHitbox(Player aPlayer, Monster aMonster);
 void applyDamages(const Player& aPlayer,const Monster& aMonster);
 
 void DisplayGameOver(SDL_Surface* screen);
+
+void DisplayMenu(SDL_Surface* screen);
+
+state currentGameState = GAME;
 
 SDL_Surface* background = SDL_LoadBMP(GAMEBACKGROUND);
 
@@ -78,9 +93,22 @@ int main ( int argc, char** argv )
                 {
                     // exit if ESCAPE is pressed
                     if (event.key.keysym.sym == SDLK_ESCAPE)
-                        done = true;
+                    {
+
+                        if(currentGameState == MENU)
+                            currentGameState = GAME;
+                        else
+                            currentGameState = MENU;
+
+                    }
                     else
+                    {
+
                         playerOne.Update(event.key.keysym.sym);
+
+                        currentGameState = GAME;
+
+                    }
 
 
                 }
@@ -91,49 +119,66 @@ int main ( int argc, char** argv )
 
         _sleep(500);
 
-        monsterOne.Update(playerOne.GetpositionX());
 
-        if(checkHitbox(playerOne, monsterOne))
+
+        switch(currentGameState)
         {
+            case GAME:
 
-            cout << "There is a hit!" << endl;
+                monsterOne.Update(playerOne.GetpositionX());
 
-            cout << "Player life: " << playerOne.Getlife();
+                if(checkHitbox(playerOne, monsterOne))
+                {
 
-            int actualDamages = playerOne.Getdamages() - monsterOne.getArmor();
+                    cout << "There is a hit!" << endl;
 
-            if(actualDamages > 0)
-                monsterOne.setLife(monsterOne.getLife() - actualDamages);
+                    cout << "Player life: " << playerOne.Getlife();
 
-            if(monsterOne.getLife() <= 0)
-            {
+                    int actualDamages = playerOne.Getdamages() - monsterOne.getArmor();
 
-                playerOne.setGold(playerOne.getGold() + monsterOne.getPrize());
+                    if(actualDamages > 0)
+                        monsterOne.setLife(monsterOne.getLife() - actualDamages);
 
-                //return;
+                    if(monsterOne.getLife() <= 0)
+                    {
 
-            }
+                        playerOne.setGold(playerOne.getGold() + monsterOne.getPrize());
 
-            actualDamages = monsterOne.getAttack() - playerOne.Getarmor();
+                        //return;
 
-            if(actualDamages > 0)
-                playerOne.Setlife(playerOne.Getlife() - actualDamages);
+                    }
 
-            if(playerOne.Getlife() <= 0)
-            {
+                    actualDamages = monsterOne.getAttack() - playerOne.Getarmor();
+
+                    if(actualDamages > 0)
+                        playerOne.Setlife(playerOne.Getlife() - actualDamages);
+
+                    if(playerOne.Getlife() <= 0)
+                    {
+
+                        break;
+
+                    }
+
+                }
+
+                RefreshGameDisplay(screen, playerOne);
+
+                monsterOne.Draw(screen);
+
+                playerOne.Draw(screen);
 
                 break;
 
-            }
+            case MENU:
+
+                DisplayMenu(screen);
+
+            default:
+
+                break;
 
         }
-
-        RefreshGameDisplay(screen, playerOne);
-
-        monsterOne.Draw(screen);
-
-        playerOne.Draw(screen);
-
 
         // finally, update the screen :)
         SDL_Flip(screen);
@@ -157,6 +202,8 @@ int main ( int argc, char** argv )
 void RefreshGameDisplay(SDL_Surface* screen, Player playerOne)
 {
 
+
+    SDL_FreeSurface(screen);
 
     SDL_Rect rectangle;
 
@@ -239,6 +286,8 @@ void RefreshGameDisplay(SDL_Surface* screen, Player playerOne)
 void DisplayGameOver(SDL_Surface* screen)
 {
 
+    SDL_FreeSurface(screen);
+
     SDL_Rect rectangle;
 
     rectangle.x = 0;
@@ -252,6 +301,28 @@ void DisplayGameOver(SDL_Surface* screen)
     SDL_Surface* gameOverImage = SDL_LoadBMP("gameOver.bmp");
 
     SDL_BlitSurface(gameOverImage, 0, screen, &rectangle);
+
+}
+
+void DisplayMenu(SDL_Surface* Screen)
+{
+
+    SDL_FreeSurface(Screen);
+
+    SDL_Rect rectangle;
+
+    rectangle.x = 0;
+
+    rectangle.y = 0;
+
+    rectangle.w = Screen->w;
+
+    rectangle.h = Screen->h;
+
+    SDL_Surface* caracMenu = SDL_LoadBMP("caracMenu.bmp");
+
+    SDL_BlitSurface(caracMenu, 0, Screen, &rectangle);
+
 
 }
 
